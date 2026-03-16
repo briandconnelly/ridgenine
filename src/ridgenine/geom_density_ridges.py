@@ -55,6 +55,8 @@ class geom_density_ridges(geom_ridgeline):
     point_color : str or None, default=None
         Colour of jittered points. If ``None``, uses the ridge outline
         colour.
+    point_seed : int, default=42
+        Random seed for reproducible jitter positions.
     kernel : str, default="gaussian"
         KDE kernel. Same options as ``stat_density``.
     adjust : float, default=1
@@ -63,6 +65,9 @@ class geom_density_ridges(geom_ridgeline):
         Trim density to the data range of each group.
     n : int, default=512
         Number of density evaluation points per group.
+    gridsize : int or None, default=None
+        Number of equally-spaced grid points for KDE evaluation.
+        If ``None``, falls back to ``n``.
     bw : str | float, default="nrd0"
         Bandwidth or bandwidth method.
     cut : float, default=3
@@ -204,9 +209,10 @@ class geom_density_ridges(geom_ridgeline):
 
         # Transform and draw
         draw_data = point_data[["x", "y", "group"]].copy()
-        draw_data["color"] = self.params.get("point_color") or point_data.get(
-            "color", "#333333"
-        )
+        point_color = self.params.get("point_color")
+        if point_color is None and "color" in point_data.columns:
+            point_color = point_data["color"].values
+        draw_data["color"] = point_color if point_color is not None else "#333333"
         draw_data["alpha"] = self.params.get("point_alpha", 1.0)
         draw_data["size"] = self.params.get("point_size", 0.5)
         draw_data["shape"] = self.params.get("point_shape", "o")

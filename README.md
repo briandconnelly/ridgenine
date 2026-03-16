@@ -207,11 +207,15 @@ filled ridge.
 | `point_size` | `0.5` | Size of jittered points. |
 | `point_alpha` | `1.0` | Opacity of jittered points. |
 | `point_color` | `None` | Colour of jittered points. `None` uses the ridge outline colour. |
+| `point_seed` | `42` | Random seed for reproducible jitter positions. |
 | `kernel` | `"gaussian"` | KDE kernel (same options as `stat_density`). |
 | `bw` | `"nrd0"` | Bandwidth or bandwidth method. |
 | `adjust` | `1` | Bandwidth multiplier. |
 | `trim` | `False` | Trim density to the data range of each group. |
 | `n` | `512` | Number of density evaluation points per group. |
+| `cut` | `3` | Grid extension past data range in multiples of `bw`. |
+| `clip` | `(-inf, inf)` | Drop x values outside this range before fitting. |
+| `bounds` | `(-inf, inf)` | Domain boundaries for boundary-bias correction. |
 | `outline_type` | `"upper"` | Which boundary to stroke: `"upper"`, `"lower"`, `"both"`, `"full"`. |
 
 The `height` aesthetic defaults to `after_stat("ndensity")` (density
@@ -232,7 +236,8 @@ vertical strips so that the fill colour can vary along the x-axis. Map
 `fill=after_stat("x")` for a smooth gradient, or
 `fill=after_stat("quantile")` for discrete quantile bands.
 
-Accepts the same KDE parameters as `geom_density_ridges`.
+Accepts the same KDE and `outline_type` parameters as `geom_density_ridges`.
+Does not support `quantile_lines` or `jittered_points`.
 
 ### `geom_ridgeline`
 

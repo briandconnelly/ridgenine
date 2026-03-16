@@ -26,9 +26,6 @@ class stat_binline(stat):
         Boundary between two bins.
     breaks : list[float] or None, default=None
         Explicit bin edges. Overrides ``bins`` and ``binwidth``.
-    draw_baseline : bool, default=True
-        If ``True``, include zero-height points at bin edges so the
-        step function returns to the baseline between groups.
     pad : bool, default=True
         If ``True``, add zero-height points at the extremes so ridges
         start and end at the baseline.
@@ -52,7 +49,6 @@ class stat_binline(stat):
         "center": None,
         "boundary": None,
         "breaks": None,
-        "draw_baseline": True,
         "pad": True,
     }
 

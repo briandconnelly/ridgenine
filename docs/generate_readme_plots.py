@@ -1,5 +1,7 @@
 """Generate the plots embedded in README.md."""
 
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from plotnine import (
     aes,
@@ -14,6 +16,7 @@ from plotnine import (
 )
 from plotnine.data import diamonds, penguins
 from plotnine.mapping.evaluation import after_stat
+from scipy.stats import gaussian_kde
 
 from ridgenine import (
     geom_density_ridges,
@@ -100,8 +103,11 @@ print("saved docs/example_quantile_lines.png")
 p5 = (
     ggplot(penguins.dropna(), aes("flipper_length_mm", "species", fill="species"))
     + geom_density_ridges(
-        scale=1.5, alpha=0.6,
-        jittered_points=True, point_size=0.5, point_alpha=0.4,
+        scale=1.5,
+        alpha=0.6,
+        jittered_points=True,
+        point_size=0.5,
+        point_alpha=0.4,
     )
     + scale_fill_manual(values=["#4E79A7", "#F28E2B", "#59A14F"])
     + labs(x="Flipper length (mm)", y=None)
@@ -142,57 +148,17 @@ print("saved docs/example_faceted.png")
 
 
 # ── Plot 8: outline types comparison ─────────────────────────────────────────
-# Side-by-side comparison of all four outline_type values
-
-import numpy as np
-from plotnine import facet_grid, ggtitle
+# Side-by-side comparison of all four outline_type values using matplotlib
+# directly for a clean, minimal diagram.
 
 rng = np.random.default_rng(42)
-outline_df = pd.concat([
-    pd.DataFrame({
-        "x": rng.normal(0, 1, 200),
-        "y": "A",
-        "outline": otype,
-    })
-    for otype in ["upper", "lower", "both", "full"]
-], ignore_index=True)
-outline_df["outline"] = pd.Categorical(
-    outline_df["outline"],
-    categories=["upper", "lower", "both", "full"],
-    ordered=True,
-)
-
-plots = []
-for otype in ["upper", "lower", "both", "full"]:
-    sub = outline_df[outline_df["outline"] == otype]
-    p = (
-        ggplot(sub, aes("x", "y"))
-        + geom_density_ridges(scale=0.9, alpha=0.7, fill="#4E79A7", outline_type=otype)
-        + ggtitle(f'outline_type="{otype}"')
-        + labs(x=None, y=None)
-        + theme_minimal()
-        + theme(figure_size=(2.5, 1.5), plot_title=theme_minimal().themeables.get("plot_title"))
-    )
-    plots.append(p)
-
-# Use patchwork-style composition if available, otherwise save individually
-# and compose with a simple grid
-from plotnine import save_as_pdf_pages
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+outline_x = rng.normal(0, 1, 200)
 
 fig, axes = plt.subplots(1, 4, figsize=(10, 2.5))
 for i, otype in enumerate(["upper", "lower", "both", "full"]):
-    sub = outline_df[outline_df["outline"] == otype].copy()
-    sub["y"] = 0.0  # numeric y for single category
-    from ridgenine.geom_ridgeline import geom_ridgeline
-    from plotnine._utils import resolution
     ax = axes[i]
-    # Simple manual rendering
-    from scipy.stats import gaussian_kde
-    x_vals = sub["x"].values
-    kde = gaussian_kde(x_vals)
-    xs = np.linspace(x_vals.min() - 1, x_vals.max() + 1, 200)
+    kde = gaussian_kde(outline_x)
+    xs = np.linspace(outline_x.min() - 1, outline_x.max() + 1, 200)
     ys = kde(xs)
     ys = ys / ys.max() * 0.8  # normalise
 
@@ -206,7 +172,8 @@ for i, otype in enumerate(["upper", "lower", "both", "full"]):
         ax.plot(
             np.concatenate([xs, xs[::-1]]),
             np.concatenate([ys, np.zeros_like(ys)]),
-            color="#333333", linewidth=1,
+            color="#333333",
+            linewidth=1,
         )
 
     ax.set_title(f'"{otype}"', fontsize=11)

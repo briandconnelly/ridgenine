@@ -30,6 +30,9 @@ class geom_density_ridges_gradient(geom_ridgeline):
     The ridge is rendered as a series of thin vertical strips, each
     receiving its own fill colour from the mapped aesthetic.
 
+    This geom does not support ``quantile_lines`` or ``jittered_points``;
+    use ``geom_density_ridges`` for those features.
+
     Parameters
     ----------
     scale : float, default=1.0
@@ -52,6 +55,11 @@ class geom_density_ridges_gradient(geom_ridgeline):
         Number of density evaluation points per group.
     bw : str | float, default="nrd0"
         Bandwidth or bandwidth method.
+    cut : float, default=3
+        Grid extension past data range in multiples of ``bw``.
+    outline_type : str, default="upper"
+        Which boundary to stroke: ``"upper"``, ``"lower"``,
+        ``"both"``, ``"full"``.
 
     Examples
     --------
@@ -60,7 +68,8 @@ class geom_density_ridges_gradient(geom_ridgeline):
 
         import numpy as np
         import pandas as pd
-        from plotnine import ggplot, aes, scale_fill_viridis_c
+        from plotnine import ggplot, aes, scale_fill_gradient
+        from plotnine.mapping.evaluation import after_stat
         from ridgenine import geom_density_ridges_gradient
 
         rng = np.random.default_rng(42)
@@ -71,9 +80,9 @@ class geom_density_ridges_gradient(geom_ridgeline):
         ])
 
         (
-            ggplot(df, aes("x", "category"))
+            ggplot(df, aes("x", "category", fill=after_stat("x")))
             + geom_density_ridges_gradient(scale=1.5)
-            + scale_fill_viridis_c()
+            + scale_fill_gradient(low="#2c7bb6", high="#d7191c")
         )
 
     See Also
