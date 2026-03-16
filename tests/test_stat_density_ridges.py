@@ -140,6 +140,5 @@ class TestIntegration:
         p.save(tmp_path / "test.png", verbose=False)
 
     def test_stat_as_standalone_layer(self, simple_df, tmp_path):
-
         p = ggplot(simple_df, aes("x", "y")) + stat_density_ridges()
         p.save(tmp_path / "test_stat.png", verbose=False)

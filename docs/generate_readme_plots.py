@@ -50,9 +50,7 @@ diamonds_ordered["cut"] = pd.Categorical(
 p2 = (
     ggplot(diamonds_ordered, aes("carat", "cut", fill="cut"))
     + geom_density_ridges(scale=2.0, alpha=0.9, trim=True)
-    + scale_fill_manual(
-        values=["#d0e8f5", "#85c1e2", "#3d9fcc", "#1a6fa3", "#0d4f7a"]
-    )
+    + scale_fill_manual(values=["#d0e8f5", "#85c1e2", "#3d9fcc", "#1a6fa3", "#0d4f7a"])
     + scale_x_continuous(limits=(0, 3))
     + labs(
         title="Better cut diamonds tend to be smaller",
