@@ -5,7 +5,9 @@ from plotnine.themes.theme import theme
 from plotnine.themes.theme_minimal import theme_minimal
 
 
-def theme_ridges(font_size: int = 14, line_size: float = 0.5, grid: bool = True) -> theme:
+def theme_ridges(
+    font_size: int = 14, line_size: float = 0.5, grid: bool = True
+) -> theme:
     """
     A clean theme designed for ridgeline plots.
 

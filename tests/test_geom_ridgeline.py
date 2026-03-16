@@ -1,10 +1,8 @@
-from unittest.mock import call, patch
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
-import pytest
 from plotnine import aes, ggplot
-from plotnine.mapping.evaluation import after_stat
 
 from ridgenine import geom_ridgeline
 
@@ -13,7 +11,6 @@ def _make_ridge_df(n=20, y_vals=None):
     """Minimal data frame suitable for geom_ridgeline."""
     if y_vals is None:
         y_vals = [1.0, 2.0, 3.0]
-    rng = np.random.default_rng(7)
     frames = []
     for y in y_vals:
         x = np.linspace(-3, 3, n)
@@ -140,24 +137,21 @@ class TestIntegration:
 
     def test_fill_aesthetic(self, tmp_path):
         df = _make_ridge_df()
-        p = (
-            ggplot(df, aes("x", "y", height="height"))
-            + geom_ridgeline(fill="#4C72B0", alpha=0.7)
+        p = ggplot(df, aes("x", "y", height="height")) + geom_ridgeline(
+            fill="#4C72B0", alpha=0.7
         )
         p.save(tmp_path / "ridgeline_fill.png", verbose=False)
 
     def test_outline_type_both(self, tmp_path):
         df = _make_ridge_df()
-        p = (
-            ggplot(df, aes("x", "y", height="height"))
-            + geom_ridgeline(outline_type="both")
+        p = ggplot(df, aes("x", "y", height="height")) + geom_ridgeline(
+            outline_type="both"
         )
         p.save(tmp_path / "ridgeline_both.png", verbose=False)
 
     def test_outline_type_full(self, tmp_path):
         df = _make_ridge_df()
-        p = (
-            ggplot(df, aes("x", "y", height="height"))
-            + geom_ridgeline(outline_type="full")
+        p = ggplot(df, aes("x", "y", height="height")) + geom_ridgeline(
+            outline_type="full"
         )
         p.save(tmp_path / "ridgeline_full.png", verbose=False)

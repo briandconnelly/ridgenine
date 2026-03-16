@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
-import pytest
 from plotnine import aes, coord_flip, facet_wrap, ggplot
 from plotnine.mapping.evaluation import after_stat
 
-from ridgenine import geom_density_ridges, geom_ridgeline, stat_density_ridges
+from ridgenine import geom_density_ridges, geom_ridgeline
 
 
 class TestClassAttributes:
@@ -53,7 +52,9 @@ class TestScaleParam:
 
 class TestKdeParams:
     def test_epanechnikov_kernel(self, simple_df, tmp_path):
-        p = ggplot(simple_df, aes("x", "y")) + geom_density_ridges(kernel="epanechnikov")
+        p = ggplot(simple_df, aes("x", "y")) + geom_density_ridges(
+            kernel="epanechnikov"
+        )
         p.save(tmp_path / "epa.png", verbose=False)
 
     def test_trim_param(self, simple_df, tmp_path):
@@ -108,16 +109,15 @@ class TestAesthetics:
 class TestComposability:
     def test_facet_wrap(self, tmp_path):
         rng = np.random.default_rng(5)
-        df = pd.concat([
-            pd.DataFrame({"x": rng.normal(i, 1, 40), "y": cat, "group": grp})
-            for i, cat in enumerate(["A", "B", "C"])
-            for grp in ["G1", "G2"]
-        ], ignore_index=True)
-        p = (
-            ggplot(df, aes("x", "y"))
-            + geom_density_ridges()
-            + facet_wrap("group")
+        df = pd.concat(
+            [
+                pd.DataFrame({"x": rng.normal(i, 1, 40), "y": cat, "group": grp})
+                for i, cat in enumerate(["A", "B", "C"])
+                for grp in ["G1", "G2"]
+            ],
+            ignore_index=True,
         )
+        p = ggplot(df, aes("x", "y")) + geom_density_ridges() + facet_wrap("group")
         p.save(tmp_path / "facet.png", verbose=False)
 
     def test_coord_flip(self, simple_df, tmp_path):
@@ -126,8 +126,5 @@ class TestComposability:
 
     def test_stat_separately_usable(self, simple_df, tmp_path):
         """stat_density_ridges can be used on its own (e.g. with geom_ridgeline)."""
-        p = (
-            ggplot(simple_df, aes("x", "y"))
-            + geom_ridgeline(stat="density_ridges")
-        )
+        p = ggplot(simple_df, aes("x", "y")) + geom_ridgeline(stat="density_ridges")
         p.save(tmp_path / "stat_separate.png", verbose=False)

@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from plotnine import aes, ggplot
-from plotnine.exceptions import PlotnineError, PlotnineWarning
+from plotnine.exceptions import PlotnineError
 
 from ridgenine import geom_density_ridges, stat_density_ridges
 
@@ -140,10 +140,6 @@ class TestIntegration:
         p.save(tmp_path / "test.png", verbose=False)
 
     def test_stat_as_standalone_layer(self, simple_df, tmp_path):
-        from plotnine import geom_line
 
-        p = (
-            ggplot(simple_df, aes("x", "y"))
-            + stat_density_ridges()
-        )
+        p = ggplot(simple_df, aes("x", "y")) + stat_density_ridges()
         p.save(tmp_path / "test_stat.png", verbose=False)

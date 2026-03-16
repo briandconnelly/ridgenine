@@ -26,6 +26,12 @@ dependencies = [
     "plotnine>=0.14",
 ]
 
+[project.urls]
+Homepage = "https://github.com/briandconnelly/ridgenine"
+Repository = "https://github.com/briandconnelly/ridgenine"
+"Bug Tracker" = "https://github.com/briandconnelly/ridgenine/issues"
+Changelog = "https://github.com/briandconnelly/ridgenine/blob/main/CHANGELOG.md"
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",

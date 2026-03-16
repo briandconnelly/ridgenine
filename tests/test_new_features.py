@@ -9,25 +9,29 @@ from plotnine.themes.theme import theme
 from ridgenine import geom_density_ridges, geom_ridgeline, theme_ridges
 from ridgenine.stat_density_ridges import stat_density_ridges
 
-
 # ── Fixtures ─────────────────────────────────────────────────────────────────
 
 
 @pytest.fixture
 def ridge_df():
     x = np.linspace(-3, 3, 40)
-    frames = [pd.DataFrame({"x": x, "y": float(y), "height": np.exp(-0.5 * x**2)})
-              for y in [1.0, 2.0, 3.0]]
+    frames = [
+        pd.DataFrame({"x": x, "y": float(y), "height": np.exp(-0.5 * x**2)})
+        for y in [1.0, 2.0, 3.0]
+    ]
     return pd.concat(frames, ignore_index=True)
 
 
 @pytest.fixture
 def raw_df():
     rng = np.random.default_rng(42)
-    return pd.concat([
-        pd.DataFrame({"x": rng.normal(i, 1, 50), "y": cat})
-        for i, cat in enumerate(["A", "B", "C"])
-    ], ignore_index=True)
+    return pd.concat(
+        [
+            pd.DataFrame({"x": rng.normal(i, 1, 50), "y": cat})
+            for i, cat in enumerate(["A", "B", "C"])
+        ],
+        ignore_index=True,
+    )
 
 
 # ── rel_min_height ────────────────────────────────────────────────────────────
@@ -68,8 +72,8 @@ class TestRelMinHeight:
     def test_rel_and_abs_min_height_combined(self, ridge_df):
         """When both min_height and rel_min_height are set, the larger wins."""
         ridge_df = ridge_df.copy()
-        ridge_df["min_height"] = 0.1   # absolute threshold
-        g = geom_ridgeline(rel_min_height=0.5)   # relative threshold = 0.5
+        ridge_df["min_height"] = 0.1  # absolute threshold
+        g = geom_ridgeline(rel_min_height=0.5)  # relative threshold = 0.5
         result = g.setup_data(ridge_df)
         threshold = max(0.1, 0.5 * ridge_df["height"].max())
         below = result["height"] < threshold
@@ -82,6 +86,7 @@ class TestRelMinHeight:
 class TestPanelScaling:
     def _compute(self, df, **kwargs):
         from unittest.mock import MagicMock
+
         s = stat_density_ridges(**kwargs)
         s.setup_params(df)
         df = df.copy()
@@ -104,19 +109,19 @@ class TestPanelScaling:
 
     def test_panel_scaling_false_global_normalisation(self, raw_df, tmp_path):
         """panel_scaling=False renders without error (global norm via compute_layer)."""
-        p = (
-            ggplot(raw_df, aes("x", "y"))
-            + geom_density_ridges(panel_scaling=False)
-        )
+        p = ggplot(raw_df, aes("x", "y")) + geom_density_ridges(panel_scaling=False)
         p.save(tmp_path / "panel_scaling_false.png", verbose=False)
 
     def test_panel_scaling_false_across_facets(self, tmp_path):
         """panel_scaling=False makes ridge heights comparable across facets."""
         rng = np.random.default_rng(1)
-        df = pd.concat([
-            pd.DataFrame({"x": rng.normal(0, 1, 50), "y": "A", "facet": "G1"}),
-            pd.DataFrame({"x": rng.normal(0, 1, 200), "y": "A", "facet": "G2"}),
-        ], ignore_index=True)
+        df = pd.concat(
+            [
+                pd.DataFrame({"x": rng.normal(0, 1, 50), "y": "A", "facet": "G1"}),
+                pd.DataFrame({"x": rng.normal(0, 1, 200), "y": "A", "facet": "G2"}),
+            ],
+            ignore_index=True,
+        )
         p = (
             ggplot(df, aes("x", "y"))
             + geom_density_ridges(panel_scaling=False)
@@ -146,11 +151,7 @@ class TestThemeRidges:
         assert isinstance(t, theme)
 
     def test_composes_with_plot(self, raw_df, tmp_path):
-        p = (
-            ggplot(raw_df, aes("x", "y"))
-            + geom_density_ridges()
-            + theme_ridges()
-        )
+        p = ggplot(raw_df, aes("x", "y")) + geom_density_ridges() + theme_ridges()
         p.save(tmp_path / "theme_ridges.png", verbose=False)
 
     def test_composes_with_grid_false(self, raw_df, tmp_path):

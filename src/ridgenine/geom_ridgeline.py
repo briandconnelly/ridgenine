@@ -4,14 +4,12 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
-
 from plotnine._utils import resolution
 from plotnine.geoms.geom_polygon import geom_polygon
 from plotnine.geoms.geom_ribbon import geom_ribbon
 
 if TYPE_CHECKING:
     from matplotlib.axes import Axes
-
     from plotnine.coords.coord import coord
     from plotnine.iapi import panel_view
 
@@ -92,12 +90,7 @@ class geom_ridgeline(geom_ribbon):
     ) -> None:
         # Draw groups from highest y to lowest y so that the bottom-most
         # ridge is painted last and appears in front — matching ggridges behaviour.
-        y_order = (
-            data.groupby("group")["y"]
-            .mean()
-            .sort_values(ascending=False)
-            .index
-        )
+        y_order = data.groupby("group")["y"].mean().sort_values(ascending=False).index
         for group in y_order:
             group_data = data[data["group"] == group]
             self.draw_group(group_data, panel_params, coord, ax, self.params)
