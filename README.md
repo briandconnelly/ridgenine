@@ -1,5 +1,8 @@
 # ridgenine
 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ridgenine)
+![PyPI - License](https://img.shields.io/pypi/l/ridgenine)
+![PyPI - Version](https://img.shields.io/pypi/v/ridgenine)
 [![codecov](https://codecov.io/gh/briandconnelly/ridgenine/graph/badge.svg?token=MIpCKWdrSo)](https://codecov.io/gh/briandconnelly/ridgenine)
 
 Ridgeline plots for [plotnine](https://plotnine.org/), inspired by the
