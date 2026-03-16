@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-03-16
+
 ### Added
 
 - `geom_density_ridges` — ridgeline plot with automatic kernel density estimation
@@ -22,5 +24,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Full composability with plotnine faceting, coord_flip, and aesthetic mappings
 - `py.typed` marker for PEP 561 typed package support
 - `ridgenine.__version__` attribute
-- GitHub Actions CI for Python 3.10–3.13
+- GitHub Actions CI for Python 3.10–3.14
 - `[project.urls]` metadata for PyPI

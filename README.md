@@ -1,5 +1,7 @@
 # ridgenine
 
+[![codecov](https://codecov.io/gh/briandconnelly/ridgenine/graph/badge.svg?token=MIpCKWdrSo)](https://codecov.io/gh/briandconnelly/ridgenine)
+
 Ridgeline plots for [plotnine](https://plotnine.org/), inspired by the
 [ggridges](https://wilkelab.org/ggridges/) package for ggplot2.
 
@@ -213,6 +215,7 @@ filled ridge.
 | `adjust` | `1` | Bandwidth multiplier. |
 | `trim` | `False` | Trim density to the data range of each group. |
 | `n` | `512` | Number of density evaluation points per group. |
+| `gridsize` | `None` | Number of equally-spaced grid points for KDE evaluation. If `None`, falls back to `n`. |
 | `cut` | `3` | Grid extension past data range in multiples of `bw`. |
 | `clip` | `(-inf, inf)` | Drop x values outside this range before fitting. |
 | `bounds` | `(-inf, inf)` | Domain boundaries for boundary-bias correction. |
@@ -291,6 +294,9 @@ cd ridgenine
 
 # Install in development mode
 uv sync
+
+# Install pre-commit hooks
+uvx pre-commit install
 
 # Run the test suite
 uv run pytest
