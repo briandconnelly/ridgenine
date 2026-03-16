@@ -69,13 +69,10 @@ class TestSetupData:
         np.testing.assert_allclose(h2, h1 * 2)
 
     def test_single_category_resolution_fallback(self):
-        """When resolution() returns 0 (e.g. mocked), height falls back to 1."""
-        from unittest.mock import patch
-
+        """With one y value, resolution() returns 0; height falls back to 1."""
         df = _make_ridge_df(y_vals=[5.0])
         g = geom_ridgeline(scale=1.0)
-        with patch("ridgenine.geom_ridgeline.resolution", return_value=0):
-            result = g.setup_data(df)
+        result = g.setup_data(df)
         # fallback y_res=1.0 → ymax should still be above ymin for positive heights
         assert (result["ymax"] >= result["ymin"]).all()
 
