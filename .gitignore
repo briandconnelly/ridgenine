@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Distribution / build
+dist/
+build/
+*.egg-info/
+
+# Virtual environment
+.venv/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ruff
+.ruff_cache/
+
+# Type checkers
+.mypy_cache/
+.pyright/
+
+# macOS
+.DS_Store
+
+# Generated example plots
+examples/*.png

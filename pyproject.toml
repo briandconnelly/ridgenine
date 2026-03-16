@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ridgenine"
+version = "0.1.0"
+description = "Ridgeline plots for plotnine"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.23",
+    "pandas>=1.5",
+    "plotnine>=0.14",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ridgenine"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=ridgenine --cov-report=term-missing --cov-fail-under=95"
+
+[tool.coverage.run]
+source = ["src/ridgenine"]
+
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
