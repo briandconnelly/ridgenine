@@ -30,13 +30,13 @@ uv add ridgenine
 ## Quick start
 
 ```python
-from plotnine import ggplot, aes, theme_classic
-from ridgenine import geom_density_ridges
+from plotnine import ggplot, aes
+from ridgenine import geom_density_ridges, theme_ridges
 
 (
     ggplot(df, aes("value", "category"))
     + geom_density_ridges()
-    + theme_classic()
+    + theme_ridges()
 )
 ```
 
@@ -49,14 +49,15 @@ from ridgenine import geom_density_ridges
 `geom_density_ridges` estimates a kernel density for each category and draws
 it as a filled ridge. The `scale` parameter controls overlap: `scale=1` means
 the tallest ridge exactly reaches the next category's baseline; values above 1
-cause overlap, values below 1 leave gaps.
+cause overlap, values below 1 leave gaps. Pair with `theme_ridges()` for a
+clean, purpose-built look.
 
 Here, a sequential fill palette reinforces the ordering — darker blue means
 higher cut quality — revealing that better-cut diamonds tend to be smaller.
 
 ```python
 import pandas as pd
-from plotnine import ggplot, aes, scale_fill_manual, scale_x_continuous, theme_minimal
+from plotnine import ggplot, aes, scale_fill_manual, scale_x_continuous
 from plotnine.data import diamonds
 from ridgenine import geom_density_ridges
 
@@ -106,6 +107,8 @@ filled ridge.
 | Parameter | Default | Description |
 |---|---|---|
 | `scale` | `1.0` | Ridge height multiplier. Values > 1 cause overlap. |
+| `rel_min_height` | `0` | Clip density tails below this fraction of the panel-wide peak to the baseline. E.g. `0.01` removes the bottom 1% of each ridge's tails. |
+| `panel_scaling` | `True` | If `True`, normalise heights per panel. If `False`, normalise globally so ridge heights are comparable across facets. |
 | `kernel` | `"gaussian"` | KDE kernel (same options as `stat_density`). |
 | `bw` | `"nrd0"` | Bandwidth or bandwidth method. |
 | `adjust` | `1` | Bandwidth multiplier. |
@@ -135,6 +138,18 @@ category baseline the ridge extends. Accepts the same `scale` and
 
 The stat underlying `geom_density_ridges`. Can be used independently to
 attach density computation to another geom.
+
+### `theme_ridges`
+
+A clean theme designed for ridgeline plots, analogous to `ggridges::theme_ridges`.
+Removes horizontal grid lines (obscured by the ridges), keeps subtle vertical
+guides, and uses a slightly larger base font size.
+
+| Parameter | Default | Description |
+|---|---|---|
+| `font_size` | `14` | Base font size in points. |
+| `line_size` | `0.5` | Thickness of axis lines and tick marks. |
+| `grid` | `True` | If `False`, remove vertical grid lines for a completely clean background. |
 
 ---
 

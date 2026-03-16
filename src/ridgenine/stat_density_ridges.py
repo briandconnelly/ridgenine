@@ -67,6 +67,7 @@ class stat_density_ridges(stat):
         "cut": 3,
         "clip": (-np.inf, np.inf),
         "bounds": (-np.inf, np.inf),
+        "panel_scaling": True,
     }
 
     def setup_params(self, data: pd.DataFrame) -> None:
@@ -96,6 +97,20 @@ class stat_density_ridges(stat):
         data = super().compute_panel(data, scales)
         if not len(data):
             return data
+        if self.params["panel_scaling"]:
+            # Normalise density to [0, 1] within this panel
+            max_d = data["density"].max()
+            data["ndensity"] = data["density"] / max_d if max_d > 0 else 0.0
+        return data
+
+    def compute_layer(self, data: pd.DataFrame, layout) -> pd.DataFrame:
+        data = super().compute_layer(data, layout)
+        if not len(data) or self.params["panel_scaling"]:
+            return data
+        # panel_scaling=False: normalise globally so ridges are comparable
+        # across facets — super().compute_layer already ran compute_panel for
+        # each panel but skipped ndensity; we compute it here on the combined
+        # output.
         max_density = data["density"].max()
         data["ndensity"] = data["density"] / max_density if max_density > 0 else 0.0
         return data

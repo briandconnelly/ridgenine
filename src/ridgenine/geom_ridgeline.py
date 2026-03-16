@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import pandas as pd
 
 from plotnine._utils import resolution
@@ -57,6 +58,7 @@ class geom_ridgeline(geom_ribbon):
         "na_rm": False,
         "scale": 1.0,
         "outline_type": "upper",
+        "rel_min_height": 0,
     }
     draw_legend = staticmethod(geom_polygon.draw_legend)
 
@@ -70,9 +72,12 @@ class geom_ridgeline(geom_ribbon):
         data["ymin"] = data["y"]
         data["ymax"] = data["y"] + data["height"] * scale * y_res
 
-        # Clip ridges below min_height to the flat baseline
+        # Clip ridges below min_height (absolute) to the flat baseline
         min_height = data["min_height"] if "min_height" in data.columns else 0
-        mask = data["height"] < min_height
+        # Clip ridges below rel_min_height (relative to panel max) to the baseline
+        rel_threshold = self.params["rel_min_height"] * data["height"].max()
+        threshold = np.maximum(min_height, rel_threshold)
+        mask = data["height"] < threshold
         data.loc[mask, "ymax"] = data.loc[mask, "ymin"]
 
         return data

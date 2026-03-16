@@ -9,12 +9,11 @@ from plotnine import (
     scale_fill_manual,
     scale_x_continuous,
     theme,
-    theme_classic,
     theme_minimal,
 )
 from plotnine.data import diamonds, penguins
 
-from ridgenine import geom_density_ridges
+from ridgenine import geom_density_ridges, theme_ridges
 
 # ── Plot 1: penguins — the "hello world" ─────────────────────────────────────
 
@@ -23,7 +22,7 @@ p1 = (
     + geom_density_ridges(scale=1.8, alpha=0.8)
     + scale_fill_manual(values=["#4E79A7", "#F28E2B", "#59A14F"])
     + labs(x="Flipper length (mm)", y=None)
-    + theme_classic()
+    + theme_ridges()
     + theme(legend_position="none", figure_size=(6, 3.5))
 )
 p1.save("docs/example_penguins.png", dpi=150, verbose=False)
