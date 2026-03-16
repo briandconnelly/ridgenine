@@ -1,8 +1,7 @@
 # ridgenine
 
 Ridgeline plots for [plotnine](https://plotnine.org/), inspired by the
-[ggridges](https://wilkelab.org/ggridges/) package for ggplot2 by
-[Claus O. Wilke](https://clauswilke.com/).
+[ggridges](https://wilkelab.org/ggridges/) package for ggplot2.
 
 Ridgeline plots display the distribution of a continuous variable across
 multiple categories as a series of overlapping density curves — useful for
@@ -52,24 +51,27 @@ it as a filled ridge. The `scale` parameter controls overlap: `scale=1` means
 the tallest ridge exactly reaches the next category's baseline; values above 1
 cause overlap, values below 1 leave gaps.
 
+Here, a sequential fill palette reinforces the ordering — darker blue means
+higher cut quality — revealing that better-cut diamonds tend to be smaller.
+
 ```python
-from plotnine import ggplot, aes, scale_fill_brewer, theme_minimal
-from plotnine.data import mpg
 import pandas as pd
+from plotnine import ggplot, aes, scale_fill_manual, scale_x_continuous, theme_minimal
+from plotnine.data import diamonds
 from ridgenine import geom_density_ridges
 
-# Order classes by median highway MPG
-class_order = mpg.groupby("class")["hwy"].median().sort_values().index.tolist()
-mpg["class"] = pd.Categorical(mpg["class"], categories=class_order, ordered=True)
+cut_order = ["Fair", "Good", "Very Good", "Premium", "Ideal"]
+diamonds["cut"] = pd.Categorical(diamonds["cut"], categories=cut_order, ordered=True)
 
 (
-    ggplot(mpg, aes("hwy", "class", fill="class"))
-    + geom_density_ridges(scale=2.5, alpha=0.75, trim=True)
-    + scale_fill_brewer(type="qual", palette="Set2")
+    ggplot(diamonds, aes("carat", "cut", fill="cut"))
+    + geom_density_ridges(scale=2.0, alpha=0.9, trim=True)
+    + scale_fill_manual(values=["#d0e8f5", "#85c1e2", "#3d9fcc", "#1a6fa3", "#0d4f7a"])
+    + scale_x_continuous(limits=(0, 3))
 )
 ```
 
-![Highway MPG by vehicle class](docs/example_mpg.png)
+![Diamond carat by cut quality](docs/example_diamonds.png)
 
 ### Faceting
 
@@ -140,11 +142,6 @@ attach density computation to another geom.
 
 ridgenine is a port of [ggridges](https://wilkelab.org/ggridges/) by
 [Claus O. Wilke](https://clauswilke.com/) to the Python / plotnine ecosystem.
-If you use ridgeline plots in a publication, consider citing the original
-ggridges package:
-
-> Wilke C.O. (2024). *ggridges: Ridgeline Plots in 'ggplot2'*.
-> R package. <https://wilkelab.org/ggridges/>
 
 ---
 

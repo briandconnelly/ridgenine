@@ -6,13 +6,13 @@ from plotnine import (
     facet_wrap,
     ggplot,
     labs,
-    scale_fill_brewer,
     scale_fill_manual,
+    scale_x_continuous,
     theme,
     theme_classic,
     theme_minimal,
 )
-from plotnine.data import mpg, penguins
+from plotnine.data import diamonds, penguins
 
 from ridgenine import geom_density_ridges
 
@@ -30,24 +30,34 @@ p1.save("docs/example_penguins.png", dpi=150, verbose=False)
 print("saved docs/example_penguins.png")
 
 
-# ── Plot 2: mpg ordered by median — shows scale overlap ──────────────────────
+# ── Plot 2: diamonds — carat by cut quality ──────────────────────────────────
+# Better-cut diamonds tend to be smaller: jewelers sacrifice carat weight
+# for optical quality. Sequential fill reinforces the quality ordering.
 
-class_order = mpg.groupby("class")["hwy"].median().sort_values().index.tolist()
-mpg_ordered = mpg.copy()
-mpg_ordered["class"] = pd.Categorical(
-    mpg_ordered["class"], categories=class_order, ordered=True
+cut_order = ["Fair", "Good", "Very Good", "Premium", "Ideal"]
+diamonds_ordered = diamonds.copy()
+diamonds_ordered["cut"] = pd.Categorical(
+    diamonds_ordered["cut"], categories=cut_order, ordered=True
 )
 
 p2 = (
-    ggplot(mpg_ordered, aes("hwy", "class", fill="class"))
-    + geom_density_ridges(scale=2.5, alpha=0.75, trim=True)
-    + scale_fill_brewer(type="qual", palette="Set2")
-    + labs(x="Highway MPG", y=None)
+    ggplot(diamonds_ordered, aes("carat", "cut", fill="cut"))
+    + geom_density_ridges(scale=2.0, alpha=0.9, trim=True)
+    + scale_fill_manual(
+        values=["#d0e8f5", "#85c1e2", "#3d9fcc", "#1a6fa3", "#0d4f7a"]
+    )
+    + scale_x_continuous(limits=(0, 3))
+    + labs(
+        title="Better cut diamonds tend to be smaller",
+        subtitle="Jewelers sacrifice carat weight for optical quality",
+        x="Carat",
+        y=None,
+    )
     + theme_minimal()
-    + theme(legend_position="none", figure_size=(6, 4))
+    + theme(legend_position="none", figure_size=(6, 4.5))
 )
-p2.save("docs/example_mpg.png", dpi=150, verbose=False)
-print("saved docs/example_mpg.png")
+p2.save("docs/example_diamonds.png", dpi=150, verbose=False)
+print("saved docs/example_diamonds.png")
 
 
 # ── Plot 3: facets ────────────────────────────────────────────────────────────
