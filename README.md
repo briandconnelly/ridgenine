@@ -12,7 +12,7 @@ Ridgeline plots display the distribution of a continuous variable across
 multiple categories as a series of overlapping density curves — useful for
 comparing many distributions at once in a compact, readable layout.
 
-![Penguin flipper length by species](docs/example_penguins.png)
+![Penguin flipper length by species](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_penguins.png)
 
 ---
 
@@ -77,7 +77,7 @@ diamonds["cut"] = pd.Categorical(diamonds["cut"], categories=cut_order, ordered=
 )
 ```
 
-![Diamond carat by cut quality](docs/example_diamonds.png)
+![Diamond carat by cut quality](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_diamonds.png)
 
 ### Gradient fills
 
@@ -99,7 +99,7 @@ from ridgenine import geom_density_ridges_gradient
 )
 ```
 
-![Gradient-filled ridgeline plot](docs/example_gradient.png)
+![Gradient-filled ridgeline plot](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_gradient.png)
 
 ### Quantile lines
 
@@ -119,7 +119,7 @@ from ridgenine import geom_density_ridges
 )
 ```
 
-![Ridgeline plot with quantile lines](docs/example_quantile_lines.png)
+![Ridgeline plot with quantile lines](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_quantile_lines.png)
 
 ### Jittered points
 
@@ -142,7 +142,7 @@ from ridgenine import geom_density_ridges
 )
 ```
 
-![Ridgeline plot with jittered points](docs/example_jittered_points.png)
+![Ridgeline plot with jittered points](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_jittered_points.png)
 
 ### Histogram ridges
 
@@ -161,7 +161,7 @@ from ridgenine import geom_ridgeline
 )
 ```
 
-![Histogram-style ridgeline plot](docs/example_binline.png)
+![Histogram-style ridgeline plot](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_binline.png)
 
 ### Faceting
 
@@ -181,14 +181,14 @@ from ridgenine import geom_density_ridges
 )
 ```
 
-![Penguin bill length by species, faceted by island](docs/example_faceted.png)
+![Penguin bill length by species, faceted by island](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_faceted.png)
 
 ### Outline types
 
 The `outline_type` parameter controls which boundary of the ridge is stroked.
 From left to right: `"upper"` (default), `"lower"`, `"both"`, `"full"`.
 
-![Outline type comparison](docs/example_outline_types.png)
+![Outline type comparison](https://raw.githubusercontent.com/briandconnelly/ridgenine/main/docs/example_outline_types.png)
 
 
 ---
