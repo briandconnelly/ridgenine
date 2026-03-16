@@ -6,7 +6,19 @@ build-backend = "hatchling.build"
 name = "ridgenine"
 version = "0.1.0"
 description = "Ridgeline plots for plotnine"
+license = { text = "MIT" }
 requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = [
     "numpy>=1.23",
     "pandas>=1.5",
