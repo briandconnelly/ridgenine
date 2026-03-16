@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
@@ -9,7 +9,10 @@ from plotnine.geoms.geom_polygon import geom_polygon
 from plotnine.geoms.geom_ribbon import geom_ribbon
 
 if TYPE_CHECKING:
-    pass
+    from matplotlib.axes import Axes
+
+    from plotnine.coords.coord import coord
+    from plotnine.iapi import panel_view
 
 
 class geom_ridgeline(geom_ribbon):
@@ -73,6 +76,26 @@ class geom_ridgeline(geom_ribbon):
         data.loc[mask, "ymax"] = data.loc[mask, "ymin"]
 
         return data
+
+    def draw_panel(
+        self,
+        data: pd.DataFrame,
+        panel_params: panel_view,
+        coord: coord,
+        ax: Axes,
+        **params: Any,
+    ) -> None:
+        # Draw groups from highest y to lowest y so that the bottom-most
+        # ridge is painted last and appears in front — matching ggridges behaviour.
+        y_order = (
+            data.groupby("group")["y"]
+            .mean()
+            .sort_values(ascending=False)
+            .index
+        )
+        for group in y_order:
+            group_data = data[data["group"] == group]
+            self.draw_group(group_data, panel_params, coord, ax, self.params)
 
     def handle_na(self, data: pd.DataFrame) -> pd.DataFrame:
         # Preserve all rows — baseline continuity matters for fill rendering

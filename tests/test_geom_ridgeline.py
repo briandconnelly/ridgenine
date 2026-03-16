@@ -1,3 +1,5 @@
+from unittest.mock import call, patch
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -86,6 +88,29 @@ class TestSetupData:
         g = geom_ridgeline()
         g.setup_data(df)
         assert set(df.columns) == original_cols
+
+
+class TestDrawOrder:
+    def test_lowest_y_group_drawn_last(self):
+        """draw_panel iterates groups from highest y to lowest y."""
+        from unittest.mock import MagicMock
+
+        df = _make_ridge_df(y_vals=[1.0, 2.0, 3.0])
+        df["group"] = df["y"].map({1.0: 1, 2.0: 2, 3.0: 3})
+        df = geom_ridgeline().setup_data(df)
+
+        draw_order = []
+
+        # Stub out draw_group — just record which y value each call received
+        def recording(data, panel_params, coord, ax, params):
+            draw_order.append(round(data["y"].iloc[0], 1))
+
+        g = geom_ridgeline()
+        with patch.object(geom_ridgeline, "draw_group", staticmethod(recording)):
+            g.draw_panel(df, MagicMock(), MagicMock(), MagicMock())
+
+        # Highest y (3.0) first, lowest y (1.0) last (drawn on top)
+        assert draw_order == [3.0, 2.0, 1.0]
 
 
 class TestHandleNa:
